@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import Button from '../Button/Button';
+import commafy from '../utils/commafy';
 
 import './App.css'
 
@@ -17,54 +18,129 @@ export default function App() {
             setOperator(null)
             return;
         }
+
+        if (content === ".") {
+            if (value.includes('.')) return;
+
+            setValue(value + '.');
+            return
+        }
         
         if (content === '+') {
-            setMemory(parseFloat(value));
+            if (operator !== null) {
+                if (operator === '+') {
+                    setMemory((memory + parseFloat(value)))
+                } else if (operator === '-') {
+                    setMemory((memory - parseFloat(value)))
+                } else if (operator === '×') {
+                    setMemory((memory * parseFloat(value)))
+                } else if (operator === '÷') {
+                    setMemory((memory / parseFloat(value)))
+                }
+            } else {
+                setMemory(parseFloat(value));
+            }
             setValue("0");
+            setOperator('+');
             return
         }
 
         if (content === '-') {
-            setMemory(parseFloat(value));
+            if (operator !== null) {
+                if (operator === '+') {
+                    setMemory((memory + parseFloat(value)))
+                } else if (operator === '-') {
+                    setMemory((memory - parseFloat(value)))
+                } else if (operator === '×') {
+                    setMemory((memory * parseFloat(value)))
+                } else if (operator === '÷') {
+                    setMemory((memory / parseFloat(value)))
+                }
+            } else {
+                setMemory(parseFloat(value));
+            }
             setValue("0");
+            setOperator('-');
             return
         }
 
-        if (content === 'x') {
-            setMemory(parseFloat(value));
+        if (content === '×') {
+            if (operator !== null) {
+                if (operator === '+') {
+                    setMemory((memory + parseFloat(value)))
+                } else if (operator === '-') {
+                    setMemory((memory - parseFloat(value)))
+                } else if (operator === '×') {
+                    setMemory((memory * parseFloat(value)))
+                } else if (operator === '÷') {
+                    setMemory((memory / parseFloat(value)))
+                }
+            } else {
+                setMemory(parseFloat(value));
+            }
             setValue("0");
+            setOperator('×');
             return
         }
 
-        if (content === '/') {
-            setMemory(parseFloat(value));
+        if (content === '÷') {
+            if (operator !== null) {
+                if (operator === '+') {
+                    setMemory((memory + parseFloat(value)))
+                } else if (operator === '-') {
+                    setMemory((memory - parseFloat(value)))
+                } else if (operator === '×') {
+                    setMemory((memory * parseFloat(value)))
+                } else if (operator === '÷') {
+                    setMemory((memory / parseFloat(value)))
+                }
+            } else {
+                setMemory(parseFloat(value));
+            }
             setValue("0");
+            setOperator('÷');
             return
         }
 
         if (content === '=') {
+            if (!operator) return;
 
+            if (operator !== null) {
+                if (operator === '+') {
+                    setValue((memory + parseFloat(value)).toString())
+                } else if (operator === '-') {
+                    setValue((memory - parseFloat(value)).toString())
+                } else if (operator === '×') {
+                    setValue((memory * parseFloat(value)).toString())
+                } else if (operator === '÷') {
+                    setValue((memory / parseFloat(value)).toString())
+                }
+            }
             setMemory(null);
+            setOperator(null);
             return;
         }
 
-
-        setValue(parseFloat(num + content).toString());
+        if (value[value.length - 1] === '.') {
+            setValue(value + content)
+        } else {
+            setValue(parseFloat(num + content).toString());
+        }
     };
 
     return (
         <div className='App'>
             <div className="content">
-                <div className="display">{value}</div>
+                <div className="display">{commafy(value)}</div>
                 <div className="buttons">
                     <Button onButtonClick={handleButtonPress} content='AC' type='function' />
                     <Button onButtonClick={handleButtonPress} content='+/-' type='function' />
                     <Button onButtonClick={handleButtonPress} content='%' type='function' />
-                    <Button onButtonClick={handleButtonPress} content='/' type='operator' />
+                    <Button onButtonClick={handleButtonPress} content='÷' type='operator' />
                     <Button onButtonClick={handleButtonPress} content='7' />
                     <Button onButtonClick={handleButtonPress} content='8' />
                     <Button onButtonClick={handleButtonPress} content='9' />
-                    <Button onButtonClick={handleButtonPress} content='x' type='operator' />
+                    <Button onButtonClick={handleButtonPress} content='×' type='operator' />
                     <Button onButtonClick={handleButtonPress} content='4' />
                     <Button onButtonClick={handleButtonPress} content='5' />
                     <Button onButtonClick={handleButtonPress} content='6' />
